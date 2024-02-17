@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300&display=swap');
+
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	outline: none;
+	border: none;
+	color: inherit;
+	background: transparent;
+	list-style: none;
+	text-decoration: none;
+	transition: all 0.3 cubic-bezier(0.23, 1, 0.32, 1);
+	word-wrap: break-word;
+	position: relative;
+	font-family: 'Public Sans', sans-serif;
+}
+
+body {
+	min-height: 100vh;
+}
+
+button,
+span,
+a,
+li,
+label,
+svg,
+i,
+img{
+	cursor: pointer;
+}
