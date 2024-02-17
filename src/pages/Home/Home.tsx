@@ -39,7 +39,7 @@ const OPEN_AI_API_KEY = openAIConfigs.apiKey
 function Home({ }: Props) {
     const { settings } = useContext(SettingContext)
     const [images, setImages] = React.useState<string[]>([
-        "https://arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/3M5XD62SD5GPRCNHFNQBYLJHWU.jpg",
+        "",
         "",
         "",
     ])
