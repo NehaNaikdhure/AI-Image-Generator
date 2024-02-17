@@ -32,14 +32,14 @@ import { getLimitValue, setLimitValue } from "../../services/LocalStorage/LocalL
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import { MachineLoader } from "../../components/loaders/SiteLoader";
 import SpinnerLoader from "../../components/loaders";
-
+import GetAppIcon from '@mui/icons-material/GetApp';
 type Props = {}
 const MAX_IMAGE_COUNT = 3
 const OPEN_AI_API_KEY = openAIConfigs.apiKey
 function Home({ }: Props) {
     const { settings } = useContext(SettingContext)
     const [images, setImages] = React.useState<string[]>([
-        "",
+        "https://arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/3M5XD62SD5GPRCNHFNQBYLJHWU.jpg",
         "",
         "",
     ])
@@ -57,7 +57,7 @@ function Home({ }: Props) {
                 toast.error("You have reached the limit of generating images")
                 setLoading(false)
                 return
-            }else{
+            } else {
                 setLimitValue('image-count', currentLimitValue + 1)
                 setCurrentLimit(currentLimitValue + 1)
             }
@@ -72,6 +72,8 @@ function Home({ }: Props) {
                     prompt: input,
                     n: currentImagesCount,
                     size: "256x256",
+                    response_format: "b64_json"
+
                 })
             })
             const data = await response.json()
@@ -79,7 +81,7 @@ function Home({ }: Props) {
             setImages([...data.data])
             let temp = [] as string[]
             for (let i = 0; i < data.data.length; i++) {
-                temp.push(data.data[i].url)
+                temp.push("data:image/jpeg;base64,"+data.data[i].b64_json)
             }
             for (let i = data.data.length - 1; i < 3; i++) {
                 temp.push("")
@@ -148,7 +150,7 @@ function Home({ }: Props) {
                         </div>
 
                         <Typography variant={"body2"} textAlign={"center"} style={{ marginBottom: "1rem", color: "gray" }}>
-                            You can use this system upto {MAX_IMAGE_COUNT-currentLimit} times
+                            You can use this system upto {MAX_IMAGE_COUNT - currentLimit} times
                         </Typography>
                         <form onSubmit={(event) => {
                             event.preventDefault()
@@ -259,6 +261,7 @@ function ImageCard({ image, loading }: { image: string, loading: boolean }) {
             minWidth: "200px",
             minHeight: "200px",
             margin: "1rem",
+            position: "relative",
         }}>
 
             {
@@ -281,19 +284,35 @@ function ImageCard({ image, loading }: { image: string, loading: boolean }) {
                             }}
                         />
                             :
-                            <CardMedia
-                                component="img"
-                                image={image}
-                                alt="random"
-                                style={{
-                                    maxWidth: "400px",
-                                    minWidth: "200px",
-                                    minHeight: "200px",
-                                    width: "100%",
-                                    height: "100%",
-                                    objectFit: "cover",
-                                }}
-                            />
+                            <>
+                                <CardMedia
+                                    component="img"
+                                    image={image}
+                                    alt="random"
+                                    style={{
+                                        maxWidth: "400px",
+                                        minWidth: "200px",
+                                        minHeight: "200px",
+                                        width: "100%",
+                                        height: "100%",
+                                        objectFit: "cover",
+                                    }}
+                                />
+                                <a href={image}id="download" download={"image.jpg"} style={{
+                                    position: "absolute",
+                                    bottom: "10px",
+                                    right: "10px",
+                                }} target="_blank" rel="noopener noreferrer">
+
+                                    <Button size="small" sx={{
+                                        position: "absolute",
+                                        bottom: "10px",
+                                        right: "10px",
+                                    }}>
+                                        <GetAppIcon />
+                                    </Button>
+                                </a>
+                            </>
                     }
                 </>
             }
